@@ -1,0 +1,262 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsthm}
+
+\title{Pset 1}
+
+\begin{document}
+\date{February 1, 2022 }
+\author{Darwin Do}
+
+\maketitle
+
+\begin{enumerate}[label=(\alph*)]
+    \item Darwin Do
+    \item 919941748
+    \item Collaborators: Graham Stodolski, Raffael Davila 
+    \item I have followed the academic integrity and collaboration policy
+    \item Hours: 22
+\end{enumerate}
+
+\newpage
+
+\section{Logic}
+\subsection{Propositional Logic}
+
+\begin{enumerate}[label=(\alph*)]
+    \item False. Assume \(x,y \in \mathbb{Z} \) and \( P(x,y): x^2=y \) Then \(\forall x \exists y P(x,y)\) is always true as \(x^2\) will always output an integer given any integer.
+    However \(\forall y \exists x P(x,y)\) is not always true. If \(y\) is not a perfect square (e.g.: \(y=3\)) then \(x\) will not be an integer. (e.g.: \( x \notin \mathbb{Z} \) for \( x^2=3 \))
+    \\\\
+    \(\forall x \exists y P(x,y)\) is true and \(\forall y \exists x P(x,y)\) is false so they cannot be equivalent.
+    
+    \item True. Given \( \neg (\exists x(\neg P(x) \land \neg Q(x))) \) We can distribute the negation using DeMorgan's Laws to get \(\forall x (P(x) \lor Q(x))\) which is the left side of the equivalence so this statement is true.
+    
+    \item False. If \(P\) and \(Q\) are both false, \(P \implies \neg Q\) evaluates to true while \( \neg P \implies Q\) evaluates to false.
+    
+    \item True. We can see this by creating a truth table and observing that the left and right side of the equivalences have the same output for all sets of inputs.
+        \begin{displaymath}
+        \begin{array}{|c c|c|c|c|c|c|c|}
+            P & Q & \neg P & \neg Q & P \implies Q & \neg P \implies \neg Q & (P \implies Q)\land (\neg P \implies \neg Q) & P \iff Q\\
+            \hline
+            F & F & T & T & T & T & T & T\\
+            T & F & F & T & F & T & F & F\\
+            F & T & T & F & T & F & F & F\\
+            T & T & F & F & T & T & T & T
+        \end{array}
+        \end{displaymath}
+    
+    
+\end{enumerate}
+
+\newpage
+
+\subsection{Proof by contradiction}
+
+\begin{proof}
+Let us assume that the sum of a rational number and irrational number is rational.
+Let \( z \) be a rational number that is the sum of a rational number \( x\) and irrational number \( y\).
+By definition of a rational number, \(z = \frac{a}{b}\) for some \(a,b \in \mathbb{Z}\)
+and \(x=\frac{a'}{b'}\) for some \(a',b'\in \mathbb{Z}\). So,
+
+\begin{align*}
+        \frac{a}{b} &= \frac{a'}{b'} + y \\
+        y &= \frac{a}{b} - \frac{a'}{b'} \\
+        &= \frac{ab'}{bb'} - \frac{a'b}{bb'}
+        &= \frac{ab'-a'b}{bb'}
+\end{align*}
+
+Integer addition and integer multiplication is closed so \(ab'-a'b\) and \(bb'\) are integers. This means \(y\) is a rational number as it is the ratio of two integers. However this violates our assumption that \(y\) is irrational so the sum of a rational number and irrational number must be irrational.
+
+\end{proof}
+
+\newpage
+
+\section{Asymptotics}
+\subsection{Definition}
+
+\begin{enumerate}[label=(\alph*)]
+    \item If \(f = \Omega (g)\) then \(\exists c\exists N: f(n) \geq c \cdot g(n)\) for \(c \in \mathbb{R}, N \in \mathbb{N}, c > 0 \land n > N\)
+    
+    \item Set \(c = \frac{1}{10}\) and \(N = 1\) and \(g = \Omega (f)\) holds
+        \begin{align*}
+            n^{{\frac{2}{3}}} &\geq \frac{1}{10} \cdot 10n^{\frac{1}{2}} \\
+            n^{\frac{1}{6}} &\geq 1
+        \end{align*}
+        
+    \item This is false. We could set \(f = 2\) and \(g = 1\). Both functions are constant time and \(f = \Theta(g)\) holds. However, \(log(2)\) is a non-zero constant while \(log(1)\) is zero. \(\log f \leq c\cdot \log g\) is not valid as \(c\cdot \log g = 0\) and \(f = \Omega(g)\)
+\end{enumerate}
+
+\newpage
+
+\subsection{Comparison}
+
+
+\begin{enumerate}[label=(\alph*)]
+    \item \(f = \Theta(g)\). The terms with the highest dominance in these two equations are is the polynomial of degree \(1\). We can ignore coefficients (the \(10\)) and lower-dominance terms (the logarithms) to conclude that these two functions are linearly increasing.
+    
+    \item \(f = \Theta (g)\). We can simplify \(g(n)\) to \(g(n) = 2\log(n)\). The coefficients on both \(f\) and \(g\) can be ignored and both equations have simple logarithmic runtimes so \(f = \Theta(g)\)
+    
+    \item \(f = \Omega(g)\). \(f\) is composed of a polynomial term while \(g\) is composed of a polynomial term and a logarithm term. The polynomial term dominates the logarithm so we only need to look at the polynomial. \(f\) has a higher degree polynomial (\(1.01\)) vs. (\(1\)) so \(g\) is a lower-bound on \(f\).
+    
+    \item \(f = \Omega(g)\). To see that we set \(\frac{n^2}{\log n} \geq c\cdot n(\log n)^2\). We can simplify to get \(n^2 \geq c\cdot n(\log n)^3\). With \(c=1\), the inequality holds true for \(n > 1\) so \(f = \Omega(g)\).
+    
+    \item \(f = \Omega(g)\). To see that we set up the inequality and simplify to get \((\log n)^{\log n + 1} \geq c \cdot n\). With \(c = \frac{1}{20}\) the inequality holds true when \(n > 20\).
+    
+    \item \(f = O(g)\). Exponential terms dominate polynomial terms. If we set \(n^{1/2} \leq c \cdot 3^{\log_2 n}\), the inequality holds if \(c = 1\) when \(n > 2\).
+    
+    \item \(f = O(g)\). Exponential terms dominate polynomial terms and the exponential term with the higher base dominates the one with the lower base. We can see this if we set \(n2^n \leq \cdot 3^n\). The inequality holds true when \(c = 1\) for \(n >2\).
+    
+    \item \(f = \Omega(g)\). If we set \(n! \geq c\cdot 2^n\), the inequality holds true at \(c = 1\) when \(n >= 4\).
+    
+    \item \(f = \Theta(g)\). We can confirm \(f = \Omega(g)\) by noting that the highest degree polynomial in \(f(n)\) is \(n^k\) while the highest degree in \(g(n)\) is \(n^{k+1}\). We can also see that \(f = O(g)\) by observing that we can split the sum into \(a\) equal pieces where the last \(a\)th section is  \((\frac{n}{a})^k + ... + n^k\) which is larger than simply summing up the \(\frac{n}{a}^k\) terms \(n/a\) times (\(\frac{n}{a}\cdot (\frac{n}{a}^k)\)). This is equivalent to \((\frac{n}{a})^{k+1}\) which is a polynomial of degree \(k + 1\). Therefore we have also shown \(f = O(g)\).
+    
+    \item \(f = \Theta(g)\). \(f(n)\) can be re-written as \(f(n) = \log(n \cdot (n-1) \cdot (n-2) \cdot ... \cdot 1)\). This in turn can be re-written as \(f(n) = \log(n) + \log(n-1) + \log(n-2) + ... + \log(1)\). There are \(n\) of these \(\log\) terms so the runtime is equivalent to \(n\log n\).
+    
+\end{enumerate}
+
+\newpage
+
+\section{Computation}
+\subsection{Geometric Series}
+\begin{enumerate}[label=(\alph*)]
+    \item Since \(c < 1\), this geometric series will converge to \(\alpha = \frac{1}{1-c}\). When calculating the asymptotic runtime, we can set the coefficient factor to \(c' = \frac{1}{\alpha + 1}\) to ensure that \(f(n) >= c'\cdot g(n)\) and \(c' = \alpha + 1 \) to ensure that \(f(n) <= c'\cdot g(n)\) for all \(n\) where \(g(n) = 1\).
+    
+    \item If \(c=1\) then the result of the summation would be \(n + 1\). When calcluating the asymptotic runtime, we can set the coefficient factor to \(c' = 2\) to ensure \(f(n) <= c'\cdot n\) and \(c' = 0.5\) to ensure \(f(n) >= c'\cdot n\) for \(n \in \mathbb{N}\)
+    
+    \item If \(c > 1\) then the summation will be a polynomial expression with highest degree \(c^n\). This term dominates all the lower-degree terms so the runtime will be \(\Theta(c^n)\)
+    
+\end{enumerate}
+
+\newpage
+
+\subsection{Recursion}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \(L(n) = 1 + 2L(n/2)\) \\
+    The base case is \(L(1) = 0\)
+    
+    \item \(L(1) = 0\) \\
+    \(L(2) = 1\) \\
+    \(L(4) = 3\) \\
+    \(L(8) = 7\) \\ 
+    \(L(16) = 15\) \\
+    \(L(32) = 31\) \\
+    \(L(n) = n -1\)
+    
+    \item
+        \textbf{Goal:} Prove that the number of lines the function prints is \(L(n) = n-1\)\\
+        \textbf{Predicate:} \(P(n) = (L(n) = n-1)\) for \(n=2^k\) with some \((k \in \mathbb{N}) \geq 0\) \\
+        \textbf{Base Case:} Base case is \(n=1\) \\
+        \textbf{Proof:} \(P(1)\) holds as \(L(1) = 1-1 = 0\)\\
+        \textbf{Inductive Step:} Let \(S\) be the set \(\{x \in \mathbb{N} | \sqrt{x} \in \mathbb{N} \land x \neq 0 \}\) \\ 
+        \((\forall n \in S)(P(n) \implies P(2n))\) \\
+    
+        \begin{proof}
+            Let's assume that \(P(n)\) holds true. Then we know that:
+            \begin{displaymath}
+                L(n) = n-1
+            \end{displaymath}
+            
+            This is the [I.H]. We can plug in \(2n\) into the recurrence deduced from the function:
+            
+    
+            \begin{align*}
+                L(2n) &= 1 + 2L(2n/2) \\
+                &= 1 + 2L(n) \\
+            \end{align*}
+            
+            We can then substitute in the [I.H] and simplify:
+            
+            \begin{align*}
+                &= 1 + 2(n-1) \\
+                &= 1 + 2n - 2 \\
+                &= 2n - 1
+            \end{align*}
+        
+            This is the same as the \(2n\) case in the [I.H] so we have proven that \(P(2n)\) holds true.
+        
+        \end{proof}
+    
+\end{enumerate}
+
+\section{Graphs}
+
+\subsection{Bipartite Graphs}
+\begin{enumerate}[label=(\alph*)]
+    \item 
+        \begin{proof}
+            Let \(G = (V,E)\) be a bipartite graph with at least one cycle. By definition, we know that \(V\) can be divided into two sets, \(S1\) and \(S2\) where no vertices in \(S1\) are connected and no vertices in \(S2\) are connected. \\\\
+            Consider a path \(p\) starting with vertex \(v\) in \(S1\) with length \(n\). Since the graph is bipartite, all vertices adjacent to \(v\) will be in \(S2\). Likewise, when our path is at a vertex in \(S2\), all adjacent vertices will be in \(S1\). \\\\
+            Whenever \(p\) crosses from \(S1\) and \(S2\), \(n\) is incremented by one. Our path length starts at \(0\) starting in \(S1\) before we follow any edges. Since \(0\) is an even number, that means every time our path ends in \(S2\), \(n\) will be odd and every time our path ends in \(S1\), \(n\) will be even. \\\\
+            A cycle needs to start and stop on the same vertex. If the beginning of our cycle starts in \(S1\), then we need to end in \(S1\) as well. That means the length of our path will have to be even.
+        \end{proof}
+        
+    \item
+        \begin{proof}
+            If \(G\) has no cycles of odd length, that all subgraphs of G have paths that contain no cycles or only even cycles. \\\\
+            For paths that don't lead to cycles, we can start at a vertex on the end of the path and walk down the path, alternating between adding each vertex to sets \(A\) and \(B\). Since there is no cycle, the path will not loop back to a previously-visited vertex and there will be no interference. At the end of the path, we will have successfully partitioned the vertices into two sets \(A\) and \(B\) that fulfill the bipartite properties. \\\\
+            For paths that contain an even cycle, we can do the same path-walk procedure in both directions starting at a vertex in the cycle. Let \(n\) equal the number of vertices visited using this method. We start off with \(n=1\) and add \(2\) for each iteration of the walk as we go in both directions. This means for each iteration, we have visited an odd number of vertices. Since the cycle is even, both ends of the walk will converge on the last vertex to ensure that the last iteration only adds \(1\) to \(n\). \\
+            
+            We have shown that a bipartite partitioning exists for paths with no cycles and a path with an even cycle. This can be generalized to a generic graph \(G\) with no cycles of odd length by splitting \(G\) into its largest even-cycle (if it exists) with any acyclic paths that branch off the largest cycle. We have proven that both an even cycle subgraph and an acyclic path subgraph can be split into a bipartite partition, so any graph \(G\) with no cycles of odd length is bipartite.
+        \end{proof}
+    
+\end{enumerate}
+\newpage
+
+\subsection{Trees}
+    Let \(G = (V,E)\) be a tree with \(n = |V|\) vertcies and \(|E|\) number of edges.\\
+    \textbf{Goal:} Prove that the number of edges in G is \(n-1\)\\
+    \textbf{Predicate:} \(P(n) = (|E| = n-1)\) \\
+    \textbf{Base Case:} Base case is a graph with one vertex: \(n=1\) \\
+    \textbf{Proof:} \(P(1)\) holds as \(P(1) = 1-1 = 0\) and a graph with one vertex has no edges\\
+    \textbf{Inductive Step:} \((\forall n \in \mathbb{N}) (n \geq 1 \land P(n) \implies P(n+1))\)
+    \begin{proof}
+        Let's assume \(P(n)\) holds true. That means \(n \geq 1\) and:
+        \begin{displaymath}
+            |E| = n - 1
+        \end{displaymath}
+        
+        This is the [I.H]. For the \(P(n+1)\) case, we need to add another vertex to our tree. Since trees are connected, we know that we will need at least 1 edge to connect our new vertex. However since there must be no cycle, we need can only connect our new vertex with a single vertex from the tree. Any more connections would create a cycle in the connected graph. \\\\
+        
+        That means we can only add 1 edge to the tree. So plugging into the [I.H]:
+        \begin{align*}
+            |E| &= (n + 1) - 1 \\
+            &= n
+        \end{align*}
+        
+        This is the same as the \(P(n+1)\) case so we have proven that \(P(n+1)\) holds true.
+    \end{proof}
+\newpage
+\subsection{Cycles}
+
+    \begin{proof}
+        First we prove that a graph with \(n\) vertices and \(n-1\) edges is a connected graph. Let \(G' = (V', E')\) be an acyclic graph with \(n = |V'|\) vertices and no edges \(|E'| = 0\). \\\\
+        Let us define the number of connected components within the graph as \(c\). \(c = n\) initially as there are no edges and each vertex is an individual component. Now let's continuously add edges to \(G'\) in an acyclic manner until \(G'\) is connected and composed only of one connected component. The addition of the first edge connects \(2\) vertices to form a single component. After the first edge, the addition of each subsequent edge will connect \(1\) vertex to that component. That means \(c\) can be modelled as a linear function of \(|E'|\) as we increase the number of edges. In particular:
+        \begin{align*}
+            c &= |V'| - |E'| \\
+            &= n - |E'|
+        \end{align*}
+        
+        \(G'\) becomes a connected graph when there exists only one component, or when \(c = 1\). We can solve for \(|E'|\) to determine the minimum number of edges on a connected graph:
+        
+        \begin{align*}
+            |E'| &= n - c \\
+            &= n - 1
+        \end{align*}
+        
+        Thus a graph with \(n\) vertices and \(n-1\) edges is a connected graph. \\\\
+        
+        Now let \(G' = (V', E')\) be a connected graph with \(n = |V'|\) vertices and \(n-1 = |E'|\) edges. Assume that \(G'\) can be made into graph \(G = (V, E)\) with the addition of one edge. \\\\
+        
+        Let us take two arbitrary vertices from \(G'\), vertex \(a\) and \(b\). Since \(G'\) is connected, we know there is a path from \(a\) to \(b\).
+        Let's add an edge between \(a\) and \(b\) to form graph \(G=(V, E)\) with \(n = |V|\) and \(n = |E|\). Now the previous path from \(a\) to \(b\) is connected as there is a way to walk from \(a\) to \(b\) using the previously defined path and then walk back to \(a\) using the newly-made edge. \\\\
+        The addition of the edge means there has to be a cycle in this graph. \\\\
+        
+        We have proven that a cycle must exist when \(n = |V|\) and \(m = |E|\) with \(m = n\). It is not possible to remove a cycle from a graph by adding additional edges, so that means the \(m \geq n\) case is proven as well.
+    \end{proof}
+
+\end{document}

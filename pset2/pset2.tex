@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage{makecell}
+\usepackage{longtable}
+
+\renewcommand{\cellalign}{tl}
+
+
+\title{Pset 2}
+
+\begin{document}
+\date{February 8, 2022 }
+\author{Darwin Do}
+
+\maketitle
+
+\begin{enumerate}[label=(\alph*)]
+    \item Darwin Do
+    \item 919941748
+    \item Collaborators: 
+    \item I have followed the academic integrity and collaboration policy
+    \item Hours: 
+\end{enumerate}
+
+\newpage
+
+\section{Stable Matching}
+\subsection{Hard example for stable matching}
+
+\begin{center}
+    \begin{longtable}{ c|l|l }
+        \textbf{Stage \#} & \textbf{Men's Proposals} & \textbf{Women Rejections \& String} \\
+        \hline
+
+        1 & \makecell{\textbf{A}: 1 \\ \textbf{B}: 2 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: \\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        2 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 2 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: \\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        3 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        4 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 1} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        5 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        6 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        7 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        8 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 2 \\ \textbf{D}: 2} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, D \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        9 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 2 \\ \textbf{D}: 3} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, D \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: C, B, A\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+        10 & \makecell{\textbf{A}: 4 \\ \textbf{B}: 1 \\ \textbf{C}: 2 \\ \textbf{D}: 3} &  
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, D \\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: C, B, A\\
+                    \textbf{4}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
+        \hline 
+
+    \end{longtable}
+\end{center}
+
+\subsection{A tight bound on the number of proposals}
+
+\end{document}

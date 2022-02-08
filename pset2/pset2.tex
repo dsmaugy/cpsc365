@@ -22,23 +22,24 @@
 \begin{enumerate}[label=(\alph*)]
     \item Darwin Do
     \item 919941748
-    \item Collaborators: 
+    \item Collaborators: Graham Stodolski, Raffael Davila
     \item I have followed the academic integrity and collaboration policy
-    \item Hours: 
+    \item Hours: 6
 \end{enumerate}
 
 \newpage
 
 \section{Stable Matching}
 \subsection{Hard example for stable matching}
-
 \begin{center}
+    (a '+' in the rejected list means that man was rejected in that stage)
+
     \begin{longtable}{ c|l|l }
         \textbf{Stage \#} & \textbf{Men's Proposals} & \textbf{Women Rejections \& String} \\
         \hline
 
         1 & \makecell{\textbf{A}: 1 \\ \textbf{B}: 2 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
-        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: +A \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: \\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
@@ -46,7 +47,7 @@
 
         2 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 2 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
-                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: +B \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: \\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
@@ -54,12 +55,12 @@
         3 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 3 \\ \textbf{D}: 1} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: A \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
-                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: +C\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
 
         4 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 1} &  
-        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, +D \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: B \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
@@ -67,7 +68,7 @@
 
         5 & \makecell{\textbf{A}: 2 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
-                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, +A \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: C\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
@@ -75,12 +76,12 @@
         6 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 3 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: A, D \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
-                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, +B\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
 
         7 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 1 \\ \textbf{D}: 2} &  
-        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
+        \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, +C \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: B, A \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
@@ -88,7 +89,7 @@
 
         8 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 2 \\ \textbf{D}: 2} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
-                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, D \\
+                    \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, +D \\
                     \textbf{3}:\\ \hspace{10mm} \textbf{String}: A \\ \hspace{10mm} \textbf{Rejected List}: C, B\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
@@ -96,7 +97,7 @@
         9 & \makecell{\textbf{A}: 3 \\ \textbf{B}: 1 \\ \textbf{C}: 2 \\ \textbf{D}: 3} &  
         \makecell{\textbf{1}:\\ \hspace{10mm} \textbf{String}: B \\ \hspace{10mm} \textbf{Rejected List}: A, D, C \\
                     \textbf{2}:\\ \hspace{10mm} \textbf{String}: C \\ \hspace{10mm} \textbf{Rejected List}: B, A, D \\
-                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: C, B, A\\
+                    \textbf{3}:\\ \hspace{10mm} \textbf{String}: D \\ \hspace{10mm} \textbf{Rejected List}: C, B, +A\\
                     \textbf{4}:\\ \hspace{10mm} \textbf{String}:  \\ \hspace{10mm} \textbf{Rejected List}: \\} \\
         \hline 
 
@@ -109,7 +110,148 @@
 
     \end{longtable}
 \end{center}
+\newpage
 
 \subsection{A tight bound on the number of proposals}
+We first show that there is at most one man who proposes to the last woman on his list.
+\begin{proof}
+    Suppose there is more than 1 man who proposes to the last woman on his list. Let those men be \(M_1\) and \(M_2\) 
+    with least preferred women \(W_1\) and \(W_2\) respectively and \(M_1\) attempts to propose before \(M_2\) in execution of the algorithm.
+
+    We know that if \(M_1\) and \(M_2\) are proposing to the last woman on their preference lists, every other woman
+    has rejected them and has another man on her "string". Therefore to end with a perfect matching, \(M_1\) must be matched
+    with \(W_1\) and \(M_2\) must be matched with \(W_2\). There are now two scenarios regarding these women:
+
+    \begin{enumerate}
+        \item \(W_1 == W_2\). If the two women are the same we run into a contradiction as both \(M_1\) and \(M_2\) cannot be matched with the same person in a perfect stable matching. 
+        \item \(W_1 \neq W_2\). We know every women except \(W_1\) has rejected \(M_1\). That means every woman except \(W_1\) has a man on her string at the time \(M_1\) is looking to propose 
+                to \(W_1\). By the same reasoning, we can say that every women except \(W_2\) has rejected \(M_2\) and every women except \(W_2\) has a man on her string.
+                However this is a contradiction of our previous statement that all women except \(W_1\) have a man on her string.
+    \end{enumerate}
+
+    That means there can only be at most 1 man who proposes to \(n\) women. The rest of the men can only propose to at max \(n-1\) women so 
+    the algorithm is bounded at \(n(n-1) + 1\) proposals.
+\end{proof}
+
+Example \(1.1\) starts off with 4 proposals in stage 1 and increments the number of unique proposals by one for each stage except the last totalling in
+13 different proposals which is the worst case for \(n=4\). This takes \(10\) days to finish. 
+
+\newpage
+\section{Combining Stable Matchings}
+\begin{enumerate}[label=(\alph*)]
+    \item \begin{proof}
+        Let us assume that two women, \(w_1\) and \(w_2\) end up picking the same man, \(m_x\).
+        That means \(m_x\) has to be a matching with one woman in one set and the other woman in the other.
+        Let's assume the following elements are in S:
+        \begin{align*}
+            (w_1, m_x) \in S \\ (w_2, m_S) \in S
+        \end{align*}
+
+        and that the following elements are in set T:
+        \begin{align*}
+            (w_1, m_T) \in T \\ (w_2, m_x) \in T
+        \end{align*}
+
+         for some arbitrary men \(m_S\) and \(m_T\).
+
+         Since we assume both \(w_1\) and \(w_2\) pick \(m_x\) when forming \(W\), we know the following about \(w_1\) and \(w_2\)'s preference lists:
+         \begin{align*}
+            w_1: m_x > m_T \\
+            w_2: m_x > m_S
+         \end{align*}
+         
+         Since there can be no ties in a preference list, we know \(m_x\) prefers \(w_1\) over \(w_2\) or \(w_2\) over \(w_1\).
+
+        \begin{enumerate}
+            \item For the \(w_1 > w_2\) case, we see there is an instability in \(T\) as \(w_1\) and \(m_x\) form a rogue couple.
+            \item For the \(w_2 > w_1\) case, we see there is an instability in \(S\) as \(w_2\) and \(m_x\) form a rogue couple.
+        \end{enumerate}
+
+        Both cases contradict our assumption that \(T\) and \(S\) are stable so no two women can pick the same man.
+    \end{proof}
+
+    \item \begin{proof}
+        Let us assume that \(W\) is not stable and we have an unstable matching: 
+        \begin{align*}
+            \alpha = (w_1, m_1) \\
+            \beta = (w_2, m_2)
+        \end{align*}
+
+        such that in terms of \(w_1\)'s ranking: \\
+        \begin{displaymath}
+            m_2 > m_1
+        \end{displaymath}
+         and in terms of \(m_2\)'s ranking: 
+         \begin{displaymath}
+            w_1 > w_2
+         \end{displaymath}
+
+         By virtue of how \(W\) is formed, we know that \(\alpha, \beta \in S \cup T\). More specifically, \(\alpha \in S \implies \beta \in T\)
+         and \(\beta \in S \implies \alpha \in T\) as these unstable pairs cannot belong to the same set as \(S\) and \(T\) are stable.
+
+         Let's arbitrarily assume \((w_1, m_1) \in S\) and \((w_2, m_2) \in T\). 
+         We know that \(w_1\) is paired with a man in \(T\) whom she ranks lower than \(m_1\) as the \((w_1, m_1) \in S\) pair beats that pair in \(T\).
+         Let's call the \(T\) pairing \((w_1, m_T) \in T\)
+
+         So \(w_1\)'s ranking is as follows:
+         \begin{displaymath}
+             m_2 > m_1 > m_T
+         \end{displaymath}
+
+         However we know that \(m_2\)'s ranking is \(w_1 > w_2\). So:
+         \begin{align*}
+             (w_1, m_T) \in T \\
+             (w_2, m_2) \in T
+         \end{align*}
+
+         is an unstable matching in \(T\) which contradicts our assumption that \(T\) is stable.
+         Therefore \(W\) must be a stable matching.
+    \end{proof}
+
+    \item \begin{proof}
+        Let's define a stable matching, \(Z\) as the way of combining \(S\) and \(T\) by forcing each man to pick 
+        the woman he prefers the least amongst the two.
+
+        Let's assume that \(Z \neq W\). Therefore for any man \(m_1\), we have:
+        \begin{align*}
+            (m_1, w_w) &\in W \\
+            (m_1, w_z) &\in Z \\
+            w_w &\neq w_z
+        \end{align*}
+
+        Let's arbitrarily say that the \((m_1, w_z) \in S\) and define the \(m_1\) matching in \(T\) as \((m_1, w_T) \in T\).
+        Since the \((m_1, w_z)\) pair "won" over the other in creation of \(Z\), we know that \(m_1\) prefers \(w_T\) over \(w_z\):
+
+        \begin{displaymath}
+            m_1: w_T > w_z
+        \end{displaymath}
+
+        We can apply this same logic with the \((m_1, w_w) \in W\) pair. Since \((m_1, w_w) \in S \cup T\) we also know \((m_s, w_w) \in S \cup T\) for some man \(m_s\).
+        We earlier assumed that \((m_1, w_z) \in S\) so that means \(m_s \neq m_1\) must be paired with \(w_w\) in \(S\): \((m_s, w_w) \in S\) and \((m_1, w_w) \in T\).
+
+
+        We earlier named the \(m_1\) pair in \(T\) as \((m_1, w_T)\) so that means \(w_T = w_w\).
+
+        We also know that \(w_w\) prefers \(m_1\) over \(m_s\) as \((m_1, w_w)\) "won" over the \((m_s, w_w)\) pair in \(S\) in the creation of \(W\):
+        \begin{displaymath}
+            w_w: m_1 > m_s
+        \end{displaymath}
+
+        However this forms an instability in \(S\) as:
+        \begin{align*}
+            (m_1, w_z) \in S \\
+            (m_s, w_w) \in S
+        \end{align*}
+
+        but \((m_1, w_T = w_w)\) form a rogue couple. This contradicts our assumption that \(S\) is stable so \(Z=W\).
+    \end{proof}
+
+    \item 
+        To create the best of both worlds for men we can create \(M\) in the same fashion as creating \(W\) in part \((a.)\) but letting men pick their preferred choice instead of women.
+        Each man is given the name of a woman he is matched with in set \(S\) and set \(T\). Of the two names, the man picks the woman whom he prefers more.
+        We create \(M\) as the set of matchings where each man is paired with the woman he picks as above.
+        It is the "best of both worlds" as each man picks the woman whom he likes greater given two stable options and the matching is stable according to \((b.)\)
+    
+\end{enumerate}
 
 \end{document}

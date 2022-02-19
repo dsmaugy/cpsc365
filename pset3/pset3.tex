@@ -5,9 +5,9 @@
 \usepackage{amsmath}
 \usepackage{array}
 \usepackage{amsthm}
+\usepackage{algpseudocode}
 
 \setlist[enumerate]{label=(\alph*)}
-
 \title{Pset 3}
 
 \begin{document}
@@ -28,6 +28,72 @@
 
 \section{Checking Connectivity}
 \begin{enumerate}
+    \item
+
+        \begin{algorithmic}
+            \Function{RedFind}{$G$, $u$, $v$}
+                \ForAll{$v \in V$}
+                    \State visited[$v$] $\gets \texttt{False}$
+                \EndFor
+
+                \State $Q = \Call{MakeQueue}{\null}$
+                \State $Q.$\Call{enqueue}{u}
+                \While{$Q$ not empty}
+                    \State $q \gets Q.$\Call{pop}{\null}
+                    \If{$q == v$}
+                        \Return{\texttt{True}}
+                    \EndIf
+
+                    \State visited[$q$] $\gets \texttt{True}$
+
+                    \ForAll{$v \in $ Adj[$q$]}
+                        \If{\Call{color}{$q$, $v$} $==$ \texttt{RED} and not visited[$v$]}
+                            \State $Q.$\Call{enqueue}{$v$}
+                        \EndIf
+                    \EndFor
+                \EndWhile
+
+                \Return{\texttt{False}}
+            \EndFunction
+            \end{algorithmic}
+
+        \textbf{Correctness} \\
+        Blah blah blah \\\\
+        \textbf{Running Time}
+
+
     \item 
+        \begin{algorithmic}
+            \Function{DFS}{$G$, $u$, $v$}
+                \ForAll{$w \in V$}
+                    \State visited[$w$] $\gets \texttt{False}$
+                \EndFor
+
+                \ForAll{$w \in $ Adj[$u$]}
+                    \If{\Call{color}{$w$, $u$} $== \texttt{Red}$}
+                        \If{\Call{Explore}{$G$, $w$, $v$, \texttt{Red}} $== \texttt{True}$}
+                            \Return{\texttt{True}}
+                        \EndIf
+                    \ElsIf{ \Call{Explore}{$G$, $w$, $v$, \texttt{Blue}} $ == \texttt{True}$}
+                            \Return{\texttt{True}}
+                    \EndIf
+                \EndFor
+
+            \Return{\texttt{False}}
+            \EndFunction
+            \\
+            \Function{Explore}{$G$, $w$, $v$, \text{edgeColor}}
+                \If{$w == v$}
+                    \Return{\texttt{True}}
+                \EndIf
+                
+                \ForAll{$u \in $ Adj[$w$]}
+                \EndFor
+                
+                \Return{\texttt{False}}
+            \EndFunction
+        \end{algorithmic}
+
+
 \end{enumerate}
 \end{document}

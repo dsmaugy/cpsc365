@@ -5,7 +5,8 @@
 \usepackage{amsmath}
 \usepackage{array}
 \usepackage{amsthm}
-\usepackage{algpseudocode}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
 
 \setlist[enumerate]{label=(\alph*)}
 \title{Pset 3}
@@ -36,8 +37,8 @@
                     \State visited[$v$] $\gets \texttt{False}$
                 \EndFor
 
-                \State $Q = \Call{MakeQueue}{\null}$
-                \State $Q.$\Call{enqueue}{u}
+                \State $Q \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
+                \State $Q.$\Call{push}{u}
                 \While{$Q$ not empty}
                     \State $q \gets Q.$\Call{pop}{\null}
                     \If{$q == v$}
@@ -46,9 +47,9 @@
 
                     \State visited[$q$] $\gets \texttt{True}$
 
-                    \ForAll{$v \in $ Adj[$q$]}
+                    \ForAll{$(q, v) \in E$}
                         \If{\Call{color}{$q$, $v$} $==$ \texttt{RED} and not visited[$v$]}
-                            \State $Q.$\Call{enqueue}{$v$}
+                            \State $Q.$\Call{push}{$v$}
                         \EndIf
                     \EndFor
                 \EndWhile
@@ -61,7 +62,8 @@
         Blah blah blah \\\\
         \textbf{Running Time}
 
-
+    \newpage
+    % TODO: use the visited array
     \item 
         \begin{algorithmic}
             \Function{DFS}{$G$, $u$, $v$}
@@ -69,12 +71,13 @@
                     \State visited[$w$] $\gets \texttt{False}$
                 \EndFor
 
-                \ForAll{$w \in $ Adj[$u$]}
-                    \If{\Call{color}{$w$, $u$} $== \texttt{Red}$}
-                        \If{\Call{Explore}{$G$, $w$, $v$, \texttt{Red}} $== \texttt{True}$}
+                \State visited[$u$] $\gets \texttt{True}$
+                \ForAll{$(u, w) \in E$}
+                    \If{\Call{color}{$u$, $w$} $== \texttt{Red}$}
+                        \If{\Call{Explore}{$G$, $w$, $v$, \texttt{Red}}}
                             \Return{\texttt{True}}
                         \EndIf
-                    \ElsIf{ \Call{Explore}{$G$, $w$, $v$, \texttt{Blue}} $ == \texttt{True}$}
+                    \ElsIf{\Call{Explore}{$G$, $w$, $v$, \texttt{Blue}}}
                             \Return{\texttt{True}}
                     \EndIf
                 \EndFor
@@ -83,17 +86,224 @@
             \EndFunction
             \\
             \Function{Explore}{$G$, $w$, $v$, \text{edgeColor}}
+                \State visited[$w$] $\gets \texttt{True}$
                 \If{$w == v$}
                     \Return{\texttt{True}}
                 \EndIf
                 
-                \ForAll{$u \in $ Adj[$w$]}
+                \ForAll{$(w, u) \in E$}
+                    \If{edgeColor $ == \texttt{Blue}$}
+                        \If{\Call{color}{$w, u$} $ == \texttt{Blue}$ and \textbf{not} visited[$u$]}
+                            \If{\Call{Explore}{$G$, $u$, $v$, \texttt{Blue}}}
+                                \Return{\texttt{True}}
+                            \EndIf
+                        \EndIf
+                    \Else   \Comment{previous edge is still on red path}
+                        \If{\textbf{not} visited[$u$]}
+                            \If{\Call{explore}{$G$, $u$, $v$, \texttt{COLOR($w$, $u$)}}}
+                                \Return{True}
+                            \EndIf
+                        \EndIf
+                    \EndIf
                 \EndFor
-                
+
+                \Return{\texttt{False}}
+            \EndFunction
+        \end{algorithmic}
+\end{enumerate}
+
+\newpage
+\section{Road Trip}
+\begin{enumerate}
+    \item 
+        \begin{algorithmic}
+            \Function{IsReachable}{$G$, $s$, $t$}
+                \ForAll{$v \in V$}
+                    \State visited[$v$] $\gets \texttt{False}$
+                \EndFor
+
+                \State $Q \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
+                \State $Q.$\Call{push}{$s$}
+                \While{$Q$ \textbf{not} empty}
+                    \State $q \gets Q.$\Call{pop}{\null}
+                    \If{$q == t$}
+                        \Return{\texttt{True}}
+                    \EndIf
+
+                    \State visited[$q$] $\gets \texttt{True}$
+                    \ForAll{$(q, v) \in E$}
+                        \If{$L \geq \ell(v, q)$ and \textbf{not} visited[$v$]}
+                            \State $Q.$\Call{push}{$v$}
+                        \EndIf
+                    \EndFor
+                \EndWhile
+
                 \Return{\texttt{False}}
             \EndFunction
         \end{algorithmic}
 
+        \item 
+            \begin{algorithmic}
+                \Function{LowestGas}{$G$, $\ell$, $s$, $t$}
+                    \ForAll{$v \in V$}
+                        \State maxL[$v$] $\gets \infty$
+                    \EndFor
+                
+                \State maxL[$s$] $\gets 0$
+                \State $P \gets \Call{MakeQueue}{V}$ \Comment{priority queue with maxL values as keys} 
+                
+                \While{$P$ \textbf{not} empty}
+                    \State $v \gets \Call{ExtractMin}{P}$
+                    \ForAll{$(v, w) \in E$}
 
+                        \If{maxL[$w$] $ >$ maxL[$v$] and maxL[$w$] $> \ell(v, w)$}
+                            \State maxL[$w$] $\gets$\Call{max}{maxL[$v$], $\ell(v, w)$}
+                            \State \Call{ChangeKey}{$P, w$}   
+                        \EndIf
+                    \EndFor
+                \EndWhile
+
+                \Return{maxL[$t$]}
+                \EndFunction
+            \end{algorithmic}
 \end{enumerate}
+
+\newpage
+\section{Counting Shortest Paths}
+
+Struct Definition
+\begin{lstlisting}
+    struct {
+        int dist, numPaths;
+    } PathStruct;
+\end{lstlisting}
+
+\begin{algorithmic}
+    \Function{NumShortest}{$G$, $\ell$, $s$, $t$}
+        \ForAll{$v \in V$}
+            \State paths[$v$].dist $\gets \infty$
+            \State $\text{paths[\(v\)].numPaths} \gets 0$
+        \EndFor
+        \State $\text{paths[\(s\)].dist} \gets 0$
+        \State $\text{paths[\(s\)].numPaths} \gets 1$
+        \State $P \gets \Call{MakeQueue}{V}$ \Comment{priority queue with dist values as keys} 
+        \While{$P$ \textbf{not} empty}
+            \State $v \gets \Call{ExtractMin}{P}$
+            \ForAll{$(v, w) \in E$}
+                \If{$\text{paths[\(w\)].dist} > \text{paths[\(v\)].dist} + \ell(v, w)$ }
+                    \State $\text{paths[\(w\)].dist} \gets \text{paths[\(v\)].dist} + \ell(v, w)$
+                    \State $\text{paths[\(w\)].numPaths} \gets  \text{paths[\(v\)].numPaths}$
+
+                \ElsIf{$\text{paths[\(w\)].dist} == \text{paths[\(v\)].dist} + \ell(v, w)$}
+                    \State $\text{paths[\(w\)].numPaths} \gets \text{paths[\(w\)].numPaths} + \text{paths[\(v\)].numPaths}$
+                \EndIf
+            \EndFor
+        \EndWhile
+
+        \Return{$\text{paths[\(t\)].numPaths}$}
+    \EndFunction
+\end{algorithmic}
+
+\newpage
+\section{Spanning Tree with Leaves}
+We implement Kruskal's algorithm two times.
+
+\begin{algorithmic}
+    \Function{LeafSpanningTree}{$G, U, w$}
+        \ForAll{$v \in V$}
+            \State \Call{MakeSet}{$v$}
+        \EndFor
+
+        \State $F \gets \text{\{ \}}$
+        \State sort edges E by increasing weight
+        \State $E' \gets \{\{u, v\} \in E | u \notin U \land v \notin U\}$ 
+        \State $E'' \gets \{\{u, v\} \in E | u \in U \oplus v \in U\}$
+
+        \ForAll{$\{u, v\} \in E'$}
+            \If{$\Call{Find}{u} \neq Find(v)$}
+                \State $F \gets F \cup \{\{u, v\}\}$
+                \State $\Call{Union}{\{u, v\}}$
+            \EndIf
+        \EndFor
+
+        \ForAll{$\{u, v\} \in E''$}
+            \If{$\Call{Find}{u} \neq Find(v)$}
+                \State $F \gets F \cup \{\{u, v\}\}$
+                \State $\Call{Union}{\{u, v\}}$
+            \EndIf
+        \EndFor
+
+    \EndFunction
+\end{algorithmic}
+
+\newpage
+\section{Perfect Matching in a Tree}
+\begin{algorithmic}
+    \Function{CheckPerfectMatching}{$G$}
+        \State $Q \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
+        \State $P \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
+
+        \ForAll{$v \in V$}
+            \State $\text{isPaired[\(v\)]} \gets \texttt{False}$
+            \If{$\text{degree of } v == 1$}
+                \State $Q.\Call{push}{v}$
+            \EndIf
+        \EndFor
+
+        \While{$Q \textbf{ not }\text{empty and } P \textbf{ not }\text{empty}$}
+            \While{$Q \textbf{ not } \text{empty}$}
+                \State $q \gets Q.\Call{pop}{\null}$
+                \If{$\text{isPaired[\(q\)]}$}
+                    \State \textbf{continue}
+                \EndIf
+
+                \State $r \gets \textbf{None}$
+                \ForAll{$\{q, v\} \in E$} \Comment{at most 1 unpaired neighbor exists}
+                    \If{$\textbf{not }\text{isPaired[\(v\)]}$}
+                        \State $r \gets v$
+                        \State \textbf{break}
+                    \EndIf
+                \EndFor
+                \If{$r == \textbf{ None}$}
+                    \Return{\texttt{False}}
+                \EndIf
+                \State $\text{isPaired[\(q\)]} \gets \texttt{True}$
+                \State $\text{isPaired[\(r\)]} \gets \texttt{True}$
+                \State $rNumUnpairedNeighbors \gets 0$
+                \State $rUnpairedNeighbor \gets \textbf{None}$
+                \ForAll{$\{r, v\} \in E$}
+                    \State $rNumUnpairedNeighbors \gets rNumUnpairedNeighbors + 1$
+                    \State $rUnpairedNeighbor \gets v$
+                \EndFor
+
+                \If{$rNumUnpairedNeighbors == 1$}
+                    \State $Q.\Call{push}{rUnpairedNeighbor}$
+                \Else
+                    \State $P.\Call{push}{r}$
+                \EndIf
+            \EndWhile
+
+            \While{$P \textbf{ not } \text{empty}$}
+                \State $p \gets P.\Call{pop}{\null}$
+                \If{$\text{isPaired[\(p\)]}$}
+                    \State \textbf{continue}
+                \EndIf
+                \State $numUnpairedNeighbors \gets 0$ 
+                \ForAll{$\{p, v\} \in E$}
+                    \If{$\textbf{not } \text{isPaired[\(v\)]}$}
+                        \State $numUnpairedNeighbors \gets numUnpairedNeighbors + 1$
+                    \EndIf
+
+                    \If{$numUnpairedNeighbors > 1$}
+                        \State skip to next $p$ in queue
+                    \EndIf
+                \EndFor
+
+                \State $Q.\Call{push}{p}$ \Comment{node only has 1 unpaired neighbor}
+            \EndWhile
+        \EndWhile
+
+        \Return{\textbf{True}}
+    \EndFunction
+\end{algorithmic}
 \end{document}

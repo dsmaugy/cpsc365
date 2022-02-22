@@ -410,6 +410,14 @@ Elements in $P$ will eventually get resolved and $Q$ will eventually visit all n
 \textbf{Running Time}\\
 $O(|V| + |E|)$ \\
 We note that if a node $v$ is popped from $Q$, we know $v$ will be paired with one if its neighbors and never be visited again.
-Each iteration in the $Q$ and $P$ while loops look at $O(|E|)$ edges each. 
+Each iteration in the $Q$ and $P$ while loops looks at all the current node's neighbors. Following the logic from BFS/DFS, that is $O(|E|)$ edges each.
+Without any additions in the $P$ queue in a graph with a perfect matching, $|V|/2$ nodes will be added/popped from the $Q$ queue and the other $|V|/2$ nodes will be
+examined by the $Q$ queue loop to get a runtime of $O(|V|)$ for just those steps.
+
+Imagine a worst case scenario where we must add the maximum number of items to $P$ possible. We note that nodes with degree $d(v) \leq 2$ will never 
+be added to $P$ following the logic in the correctness justification. Therefore the number of items added to $P$ will always be $< |V|$.
+Once an item $v \in V$ is in $P$, it waits until the $Q$ queue handles more elements and $v$ gets resolved. That means $v$ will have gone from investigation by the $Q$ queue, 
+thrown into the $P$ queue, and then thrown back into the $Q$ queue. Since the $P$ queue will always insert $< |V|$ times, the total work done by the $P$ and $Q$ queues will be $< 3|V|$.
+Combining it with the work of the edges, we get the total runtime to be $O(|V| + |E|)$ 
  
 \end{document}

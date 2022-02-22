@@ -20,9 +20,9 @@
 \begin{enumerate}
     \item Darwin Do
     \item 919941748
-    \item Collaborators: 
+    \item Collaborators: Raffael Davila
     \item I have followed the academic integrity and collaboration policy
-    \item Hours: 
+    \item Hours: 20
 \end{enumerate}
 
 \newpage
@@ -38,8 +38,8 @@
                 \EndFor
 
                 \State $Q \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
-                \State $Q.$\Call{push}{u}
-                \While{$Q$ not empty}
+                \State $Q.$\Call{push}{$u$}
+                \While{$Q$ \textbf{not} empty}
                     \State $q \gets Q.$\Call{pop}{\null}
                     \If{$q == v$}
                         \Return{\texttt{True}}
@@ -48,7 +48,7 @@
                     \State visited[$q$] $\gets \texttt{True}$
 
                     \ForAll{$(q, v) \in E$}
-                        \If{\Call{color}{$q$, $v$} $==$ \texttt{RED} and not visited[$v$]}
+                        \If{\Call{color}{$q$, $v$} $==$ \texttt{RED} and \textbf{not} visited[$v$]}
                             \State $Q.$\Call{push}{$v$}
                         \EndIf
                     \EndFor
@@ -57,13 +57,19 @@
                 \Return{\texttt{False}}
             \EndFunction
             \end{algorithmic}
-
+        
+        
         \textbf{Correctness} \\
-        Blah blah blah \\\\
-        \textbf{Running Time}
+        This algorithm is basically BFS with the added constraint that only nodes connected to the current node via a red edge can be added to the BFS queue.
+        That means this algorithm will discover all nodes in the graph $G'$ where $G'$ is defined as $G$ with only red edges.
+        A path that only contains red edges will exist in $G'$ so this algorithm will discover that path if it exists. \\\\
+        \textbf{Running Time} \\
+        $O(|V| + |E|)$ \\
+        With the following search constraint of only searching red nodes, the worst case scenario is 
+        where all edges in the graph are red. If this is the case, this algorithm is exactly BFS and $O(|V| + |E|)$ as discussed in class as
+        each vertex will be added/remove from $Q$ once and the while loop will access $2|E|$ edges as per the handshake lemma.
 
     \newpage
-    % TODO: use the visited array
     \item 
         \begin{algorithmic}
             \Function{DFS}{$G$, $u$, $v$}
@@ -110,6 +116,18 @@
                 \Return{\texttt{False}}
             \EndFunction
         \end{algorithmic}
+
+        \textbf{Correctness} \\
+        This is algorithm is a modified version of DFS. When the DFS algorithm has crossed a blue edge, it will then only travel along blue edges
+        along that path. Otherwise, it is a normal DFS that will return \texttt{True} if the current recursive level or one of its sublevels has detected the target node
+        and \texttt{False} otherwise. If there is a path to the target node with the same color edges: the modified-DFS conditions are irrelevant and the algorithm functions as a standard DFS whose correctness
+        was proven in class with the \texttt{Explore} lemma that all nodes reachable in the path will be explored. If there is a path that starts with red edges and then later has blue edges,
+        once the algorithm detects the blue edges, it will only recurse on other blue edges. This means that the target node at the end of the blue-edges will be found if it exists.\\\\
+        \textbf{Running Time} \\
+        $O(|V| + |E|)$ \\
+        The same logic from part (a) applies here. The worst case scenario is when all edges in the graph are the same color and no nodes must be skipped in the search. 
+        If this is the case, this algorithm is exactly DFS and $O(|V| + |E|)$ as discussed in class as each vertex will be visited once
+        and each edge will be accessed $2|E|$ times per handshake lemma. 
 \end{enumerate}
 
 \newpage
@@ -117,7 +135,7 @@
 \begin{enumerate}
     \item 
         \begin{algorithmic}
-            \Function{IsReachable}{$G$, $s$, $t$}
+            \Function{IsReachable}{$G$, $s$, $t$, $\ell$}
                 \ForAll{$v \in V$}
                     \State visited[$v$] $\gets \texttt{False}$
                 \EndFor
@@ -142,6 +160,15 @@
             \EndFunction
         \end{algorithmic}
 
+        \textbf{Correctness} \\
+        This algorithm is very simliar to part (1.a) where it is a modified BFS that only adds nodes to the queue if another condition is met.
+        In this case, the condition is that the car's gas tank is big enough to traverse the edge between two nodes. We can say that this algorithm will perform a full
+        BFS on every node in graph $G'$ where $G'$ is defined as all the nodes with a connecting edge with edge weight $\leq L$. If there is a feasible route from $s$ to $t$ then
+        $t \in G'$ and the algorithm will find it.   \\\\
+        \textbf{Running Time} \\
+        $O(|V| + |E|)$ \\
+        The same logic from part (1.a) applies here. The worst case scenario is when all edges are traversable and we must perform BFS on the entire graph leading to $O(|V| + |E|)$ runtime.
+
         \item 
             \begin{algorithmic}
                 \Function{LowestGas}{$G$, $\ell$, $s$, $t$}
@@ -156,7 +183,7 @@
                     \State $v \gets \Call{ExtractMin}{P}$
                     \ForAll{$(v, w) \in E$}
 
-                        \If{maxL[$w$] $ >$ maxL[$v$] and maxL[$w$] $> \ell(v, w)$}
+                        \If{maxL[$w$] $ >$ maxL[$v$] \textbf{and} maxL[$w$] $> \ell(v, w)$}
                             \State maxL[$w$] $\gets$\Call{max}{maxL[$v$], $\ell(v, w)$}
                             \State \Call{ChangeKey}{$P, w$}   
                         \EndIf
@@ -166,11 +193,28 @@
                 \Return{maxL[$t$]}
                 \EndFunction
             \end{algorithmic}
+
+            \textbf{Correctness} \\
+            This is a modified version of the priority-queue implementation of Dijkstra's algorithm for finding the shortest path in a weighted graph.
+            Suppose we have a region $R \subseteq V$ where $\forall v \in R$, of all paths to $v$, maxL[$v$] contains the value of the heaviest edge in the path to $v$ with the lightest heaviest edge (let's call this the \textbf{significant edge}).
+            We grow $R$ greedily by moving to the next node with the lightest significant edge. This is equivlanet to the priority-queue implementation of Dijikstra we talked about in class,
+            but with the heuristic of minimizing the weight of the significant edge instead of the sum of all weights. Note that when updating \textbf{maxL} of a neighbor, we set it
+            to either the weight of the significant edge of the current node or the weight of the edge from the current node to the neighbor, whichever is greater. At the end of the algorithm,
+            all nodes will be in $R$ and maxL[$t$] will return the value of the significant edge of the target node.       \\
+
+            \textbf{Running Time} \\
+            $O((|V| + |E|)log|V|)$ \\
+            In class we discussed how the priority queue implementation of Dijikstra to find the shortest path is $O((|V| + |E|)log|V|)$ as the $log|V|$ comes from the 
+            priority queue operations. This algorithm uses the same structure as the one in class. We use a priority queue to keep track of nodes not yet in our solved region $R$
+            and update the priority queue every time a change to the \textbf{maxL} array is made. The only difference is the logic in when to update \textbf{maxL}. For a worst-case scenario,
+            this does not change and the runtime is the same as mentioned in class.
+    
 \end{enumerate}
 
 \newpage
 \section{Counting Shortest Paths}
-
+We first define a structure that holds both the length of the shortest path to a node and the number of paths with that length. 
+Our algorithm is a modified version of the priority queue implementation of Dijikstra's algorithm.
 Struct Definition
 \begin{lstlisting}
     struct {
@@ -193,7 +237,7 @@ Struct Definition
                 \If{$\text{paths[\(w\)].dist} > \text{paths[\(v\)].dist} + \ell(v, w)$ }
                     \State $\text{paths[\(w\)].dist} \gets \text{paths[\(v\)].dist} + \ell(v, w)$
                     \State $\text{paths[\(w\)].numPaths} \gets  \text{paths[\(v\)].numPaths}$
-
+                    \State $\Call{ChangeKey}{w}$
                 \ElsIf{$\text{paths[\(w\)].dist} == \text{paths[\(v\)].dist} + \ell(v, w)$}
                     \State $\text{paths[\(w\)].numPaths} \gets \text{paths[\(w\)].numPaths} + \text{paths[\(v\)].numPaths}$
                 \EndIf
@@ -204,9 +248,23 @@ Struct Definition
     \EndFunction
 \end{algorithmic}
 
+\textbf{Correctness} \\
+This is a modified version of the priority-queue implementation of Dijkstra's algorithm for finding the shortest path in a weighted graph.
+We do the same steps with keeping track of the shortest path to each node and greedily expanding our solution set $R$.
+The additional steps we do are to keep track of the number of paths with the \textbf{numPaths} value in our Path struct.
+If the next smallest-path node not in $R$, $v$ has a path that is smaller than the currently recorded path for $v$, the distance of the path will be updated accordingly
+in \textbf{paths[$w$].dist} and the \textbf{numPaths} will be set to the number of paths to the newest member of $R$.
+If $v$ has a smallest path equivalent to the value of the smallest path in the newest member of $R$, $v$'s \textbf{numPath} will be set
+to the sum of the two nodes' \textbf{numPaths}. When $t$ is added to $R$, we will have the number of smallest paths to $t$.        \\
+
+\textbf{Running Time} \\
+$O((|V| + |E|)log|V|)$ \\
+This follows the same logic in part 2B. We use a modified version of Dijikstra that doesn't change the runtime.
+Here, the number of loop iterations and queue operations are the same, we just keep track of more data in each iteraetion.
+
 \newpage
 \section{Spanning Tree with Leaves}
-We implement Kruskal's algorithm two times.
+We use a modified version of Kruskal's algorithm.
 
 \begin{algorithmic}
     \Function{LeafSpanningTree}{$G, U, w$}
@@ -236,14 +294,32 @@ We implement Kruskal's algorithm two times.
     \EndFunction
 \end{algorithmic}
 
+\textbf{Correctness} \\
+In class we discussed how Kruskal's algorithm can be used to construct a MST. Let us define $G'$ as the graph of $G$ without any vertices that are in $U$.
+If we run Kruskal's on $G'$, we get the lightest spanning tree that can be constructed with $V' = V \setminus U$.
+Now we must add on the remaining vertices $v \in U$ to form our spanning tree with $v$ as leaves. We remove any edges $(v, u)$ connecting to vertices in $U$ where $v \in U \land u\in U$
+and run Kruskal's again on this edgeset. The connections from $v \in U$ to $G'$ will be minimal following Kruskal's and $v$ will be guaranteed a leaf as we removed all edges connecting elements in $U$ together.      
+\\
+
+\textbf{Running Time} \\
+$O((|V| + |E|)log|V|)$ \\
+We discussed in class how Kruskal and Prim's algorithm have the same runtime as a P-queue implementation of Dijikstra, $O((|V| + |E|)log|V|)$.
+Since our algorithm basically performs 2 iterations of the loop in Kruskal's algorithm, we have the same asymptotic runtime.
+
 \newpage
 \section{Perfect Matching in a Tree}
+\footnotesize
+This algorithm starts from the leaves of the graph and creates pairs of matchings while working its way inwards.
+If there is a conflict where there is more than 1 way to go "inwards" into the graph, the spot is visited later through the $P$ queue.
+If a node is found to be unpairable with any of its neighbors, \texttt{False} is returned, otherwise, \texttt{True} is returned at the end
+when all nodes are paired up.
+
 \begin{algorithmic}
     \Function{CheckPerfectMatching}{$G$}
         \State $Q \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
         \State $P \gets \Call{MakeQueue}{\null}$ \Comment{standard FIFO queue}
 
-        \ForAll{$v \in V$}
+        \ForAll{$v \in V$}  \Comment{add all leaves to Q}
             \State $\text{isPaired[\(v\)]} \gets \texttt{False}$
             \If{$\text{degree of } v == 1$}
                 \State $Q.\Call{push}{v}$
@@ -261,7 +337,6 @@ We implement Kruskal's algorithm two times.
                 \ForAll{$\{q, v\} \in E$} \Comment{at most 1 unpaired neighbor exists}
                     \If{$\textbf{not }\text{isPaired[\(v\)]}$}
                         \State $r \gets v$
-                        \State \textbf{break}
                     \EndIf
                 \EndFor
                 \If{$r == \textbf{ None}$}
@@ -269,14 +344,16 @@ We implement Kruskal's algorithm two times.
                 \EndIf
                 \State $\text{isPaired[\(q\)]} \gets \texttt{True}$
                 \State $\text{isPaired[\(r\)]} \gets \texttt{True}$
-                \State $rNumUnpairedNeighbors \gets 0$
+                \State $rNumUnpairedN \gets 0$
                 \State $rUnpairedNeighbor \gets \textbf{None}$
-                \ForAll{$\{r, v\} \in E$}
-                    \State $rNumUnpairedNeighbors \gets rNumUnpairedNeighbors + 1$
-                    \State $rUnpairedNeighbor \gets v$
+                \ForAll{$\{r, v\} \in E$} \Comment{check to see if there is a valid parent}
+                    \If{\textbf{not} isPaired[$v$]}
+                        \State $rNumUnpairedN \gets rNumUnpairedN + 1$
+                        \State $rUnpairedNeighbor \gets v$
+                    \EndIf
                 \EndFor
 
-                \If{$rNumUnpairedNeighbors == 1$}
+                \If{$rNumUnpairedN == 1$}
                     \State $Q.\Call{push}{rUnpairedNeighbor}$
                 \Else
                     \State $P.\Call{push}{r}$
@@ -295,15 +372,44 @@ We implement Kruskal's algorithm two times.
                     \EndIf
 
                     \If{$numUnpairedNeighbors > 1$}
+                        \State $P.\Call{push}{p}$
                         \State skip to next $p$ in queue
                     \EndIf
                 \EndFor
-
-                \State $Q.\Call{push}{p}$ \Comment{node only has 1 unpaired neighbor}
+                \If{$numUnpairedNeighbors == 0$}
+                    \Return{\texttt{False}}
+                \Else
+                    \State $Q.\Call{push}{p}$ \Comment{node only has 1 unpaired neighbor}
+                \EndIf
             \EndWhile
         \EndWhile
 
         \Return{\textbf{True}}
     \EndFunction
 \end{algorithmic}
+
+\normalsize
+
+\textbf{Correctness}\\
+This algorithm works by greedily attempting to create pairs of nodes starting from the leaves of the graph.
+Leaves only have one parent so if a graph is a perfect matching, the leaves will be paired with their direct parent.
+If the algorithm encounters a node that has more than one possible matching at that point in time, it will add it to the $P$ queue
+and "save it" later for processing. After every node in $Q$ is either paired or pushed to $P$, we can re-examine the nodes in $P$ to see if they are "resolved" (have 1 or 0 unpaired parent).
+
+We will now show that a node in $v \in P$ will always eventually be resolved. By nature of the algorithm, $v$ has more than one neighbor that is unclaimed.
+That means the degree of $v$: $d(v) \geq 3$: one neighbor from the claimed path that pushed $v$ to $P$, and a minimum of 2 unpaired nodes, $u$ and $w$.
+Since the graph is acyclic, we know that $u$ and $w$ are not connected and that they branch off into seperate paths that lead to a leaf ($u_\ell$ and $w_\ell$)
+as going down any acyclic path will eventually lead to a leaf node (there is no cycle to 'loop' back around).
+We know that $u_\ell$ and $w_\ell$ were added to the $Q$ queue as they are leaf nodes. This means that eventually, the algorithm will go down
+the paths started by these leaves and pair $u$ and $w$ with other partners (or fail before-hand). We know that there cannot be a gridlock of unresolved
+nodes as the graph is acyclic so all nodes have a path that will claim them (or fail in the case of a non-perfect matching graph). 
+
+Elements in $P$ will eventually get resolved and $Q$ will eventually visit all nodes to pair them or fail.\\
+
+
+\textbf{Running Time}\\
+$O(|V| + |E|)$ \\
+We note that if a node $v$ is popped from $Q$, we know $v$ will be paired with one if its neighbors and never be visited again.
+Each iteration in the $Q$ and $P$ while loops look at $O(|E|)$ edges each. 
+ 
 \end{document}

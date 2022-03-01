@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+
+\setlist[enumerate]{label=(\alph*)}
+\title{Pset 4}
+
+\begin{document}
+
+\newcommand{\Not}{\textbf{not}}
+
+\date{March 8, 2022 }
+\author{Darwin Do}
+
+\maketitle
+
+\begin{enumerate}
+    \item Darwin Do
+    \item 919941748
+    \item Collaborators: 
+    \item I have followed the academic integrity and collaboration policy
+    \item Hours: 
+\end{enumerate}
+
+\newpage
+
+\section{Finding Element}
+
+\begin{enumerate}
+    \item Start at the first element, \(A[1]\). If this is the target value, return this index, otherwise, find the absolute value of the difference between this element and the target value and increment the index by that value.
+        Keep on repeating this process of skipping \(|target - current|\) indices until we reach the target element.
+        This works as we know that each successive element in the array can only differ from the previous element by at most \(1\). Therefore the minimum number of indices that can contain the target element from
+        the current indice is \(|target - current|\). Therefore we only examine the indices that the target could possibly exist in given the construction of the array and skip all the indices where the element cannot be contained there.
+
+    \item 
+        \begin{algorithmic}
+            \Function{FindElement}{$A, t$}
+                \State $i = 1$
+                \While{$A[i] \neq t$}
+                    \State $i = |A[i] - t|$
+                \EndWhile
+                \Return{$i$}
+            \EndFunction
+        \end{algorithmic}
+\end{enumerate}
+
+\newpage
+\section{Maximum Sum}
+\begin{enumerate}
+    \item 
+\end{enumerate}
+
+\newpage
+\section{Longest Common Substring}
+\begin{enumerate}
+    \item 
+\end{enumerate}
+
+\newpage
+\section{Infinitely Many Rods}
+\begin{enumerate}
+    \item 
+\end{enumerate}
+
+\newpage
+\section{At Most One Rod}
+\begin{enumerate}
+    \item 
+\end{enumerate}
+\end{document}

@@ -33,27 +33,94 @@
 \section{Finding Element}
 
 \begin{enumerate}
-    \item Start at the first element, \(A[1]\). If this is the target value, return this index, otherwise, find the absolute value of the difference between this element and the target value and increment the index by that value.
-        Keep on repeating this process of skipping \(|target - current|\) indices until we reach the target element.
-        This works as we know that each successive element in the array can only differ from the previous element by at most \(1\). Therefore the minimum number of indices that can contain the target element from
-        the current indice is \(|target - current|\). Therefore we only examine the indices that the target could possibly exist in given the construction of the array and skip all the indices where the element cannot be contained there.
-
     \item 
+        We can solve this problem using binary search.
+        We split our input of size $n$ into 2 groups of size $n/2$ with a "partition" element dividing between the two groups.
+        If the partition element equals the target, we return the index of the partition.
+        If the partition is less than the target, we recurse on the right group. Otherwise, the partition is greater than the target and we recurse on the left group.
+
+        This algorithm works as it relies on the fact that successive elements can only change by $1$ and $p \leq t \leq q$.
+        Let's define the partition element as $x$. If $x \leq t$, then $x \leq q$ and $t$ has to appear somewhere in between $x$ and $q$ as every value between $x$ and $q$ will be reached as we increase by 1 to get to $q$.
+        The same logic applies for the $x \geq t$ case, $t$ would have to appear between $p$ and $x$.   
+    \item 
+        $\star$ Note that I'm using array inclusive array range notation 
+        (i.e. $A[1:x]$) means all elements in the array $A$ from the first element to element $x$, including element $x$.
         \begin{algorithmic}
             \Function{FindElement}{$A, t$}
-                \State $i = 1$
-                \While{$A[i] \neq t$}
-                    \State $i = |A[i] - t|$
-                \EndWhile
-                \Return{$i$}
+                \State $n = \Call{length}{A}$
+                \State $x = A[\lceil \frac{n}{2} \rceil]$
+                \If{$x == t$}
+                    \Return{$\frac{n}{2}$}
+                \ElsIf{$x > t$}
+                    \Return{\Call{FindElement}{$A[1 : \frac{n}{2} - 1], t$}}
+                \Else
+
+                    \Return{\Call{FindElement}{$A[\frac{n}{2} + 1 : n], t$}}
+                \EndIf
             \EndFunction
         \end{algorithmic}
+
+    \item $T(n) = T(\frac{n}{2}) + 1$
+    \item 
+        \begin{align*}
+            A = 1, B = 2, D = 0 \\
+            R = \frac{A}{B^D} = \frac{1}{2^0} = 1
+        \end{align*}
+        So according to the Master Theorem: $T(n) = O(n^D\log n) = O(\log n)$
+    
 \end{enumerate}
 
 \newpage
 \section{Maximum Sum}
 \begin{enumerate}
+    \item We use a divide and conquer algorithm that divides each input into $2$ parts with size $n/2$.
+            The algorithm keeps doing this until we reach the base case where $n=1$. In this case, we simply return the value of the element.
+            Otherwise, for the "conquering" step of the algorithm, we let $L$ equal the solution for the left part and $R$ equal the solution for the right part as returned by our recursive calls.
+            We also define $LS$ as the largest sum of the left part starting from $A[\lceil n/2\rceil]$ to $A[0]$ and
+            $RS$ as the largest sum of the right part starting from $A[\lceil n/2\rceil + 1]$ to $A[n]$.
+            We then return the maximum of the following options, $L$, $R$, or $LS + RS$.
+
+            This algorithm works as each recursive call will always return the biggest contiguous sum within its input, whether that be the sum from the left side, the sum from the right side,
+            or a sum that spans between the two sides.
+
     \item 
+        \begin{algorithmic}
+            \Function{MaxSum}{$A$}
+                \State $n = \Call{length}{A}$
+
+                \If{$n == 1$}
+                    \Return{$A[1]$}
+                \EndIf
+                \State $M = \lceil \frac{n}{2} \rceil$
+                \State $L = \Call{MaxSum}{A[1 : M]}$
+                \State $R = \Call{MaxSum}{A[M+1 : n]}$
+                \State $LS = 0; RS = 0;$
+                \State $tempTotal = 0$
+                \For{$i$ from $M$ to $1$}
+                    \State $tempTotal = tempTotal + A[i]$
+                    \If{$tempTotal > LS$}
+                        \State $LS = tempTotal$
+                    \EndIf
+                \EndFor
+
+                \State $tempTotal = 0$
+                \For{$i$ from $M+1$ to $n$}
+                \State $tempTotal = tempTotal + A[i]$
+                \If{$tempTotal > RS$}
+                    \State $RS = tempTotal$
+                \EndIf
+            \EndFor
+
+            \Return{\Call{max}{$L, R, LS + RS$}}
+            \EndFunction
+        \end{algorithmic}
+    \item $T(n) = 2T(\frac{n}{2}) + O(n)$
+    \item 
+        \begin{align*}
+            A = 2, B = 2, D = 1 \\
+            R = \frac{A}{B^D} = \frac{2}{2^1} = 1
+        \end{align*}
+        So according to the Master Theorem: $T(n) = O(n^D\log n) = O(n\log n)$
 \end{enumerate}
 
 \newpage

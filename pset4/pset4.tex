@@ -126,7 +126,49 @@
 \newpage
 \section{Longest Common Substring}
 \begin{enumerate}
+    \item $T(i, j)$ is the length of the largest common substring that ends at index $i$ in $x$ and index $j$ in $y$.
+            The final answer of the algorithm will be the max value of all table entries.
     \item 
+        \begin{align*}
+            T(i, j) = 
+            \begin{array}{cc}
+                \Bigg\{ & 
+                \begin{array}{cc}
+                    T(i-1, j-1) + 1 & x[i] = y[j] \\
+                    0 & x[i] \neq y[j] 
+                \end{array}
+            \end{array}
+        \end{align*}
+        The base cases are the indexes of the recurrence before the first character. In this homework with 1-indexing, our base cases would be $T(0, j) = 0$ and $T(i, 0) = 0$.
+        
+        The recurrence works as each value in the table holds the value of the longest substring that ends at index $i$ in string $x$ and index $j$ in string $y$. If this common substring with length $L$ can grow,
+        then $x[i+1] = y[j+1]$. We know then that the current common substring now has length $L' = L+1$. Otherwise, if the next are not equal, then the common substring has ended and the length
+        of the common substring \emph{that ends at indexes \textbf{i} and \textbf{j} in strings \textbf{x} and \textbf{y} respectively} is $0$. The piecewise function of the recurrence accounts for this.
+    \item 
+        \begin{algorithmic}
+            \Function{LongestCommonSubstring}{$x, y$}
+                \ForAll{$i$ from $0$ to $n$ and $j$ from $0$ to $m$}
+                    \State $sub[0][j] = 0; \text{ } sub[i][0] = 0$
+                \EndFor
+
+                \State $maxLength = 0$
+                \ForAll{$i$ from $1$ to $n$}
+                    \ForAll{$j$ from $1$ to $m$}
+                        \If{$x[i] == y[j]$}
+                            \State $sub[i][j] = sub[i-1][j-1] + 1$
+                            \If{$sub[i][j] > maxLength$}
+                                $maxLength = sub[i][j]$
+                            \EndIf
+                        \Else
+                            \State $sub[i][j] = 0$
+                        \EndIf
+                    \EndFor
+                \EndFor
+                \Return{$maxLength$}
+            \EndFunction
+        \end{algorithmic}
+    \item this shit is $O(nm)$ explain why!!!
+
 \end{enumerate}
 
 \newpage

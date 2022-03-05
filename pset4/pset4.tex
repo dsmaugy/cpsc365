@@ -14,6 +14,9 @@
 \begin{document}
 
 \newcommand{\Not}{\textbf{not}}
+\newcommand{\AAnd}{\textbf{and}}
+\newcommand{\True}{\texttt{True}}
+\newcommand{\False}{\texttt{False}}
 
 \date{March 8, 2022 }
 \author{Darwin Do}
@@ -142,7 +145,7 @@
         The base cases are the indexes of the recurrence before the first character. In this homework with 1-indexing, our base cases would be $T(0, j) = 0$ and $T(i, 0) = 0$.
         
         The recurrence works as each value in the table holds the value of the longest substring that ends at index $i$ in string $x$ and index $j$ in string $y$. If this common substring with length $L$ can grow,
-        then $x[i+1] = y[j+1]$. We know then that the current common substring now has length $L' = L+1$. Otherwise, if the next are not equal, then the common substring has ended and the length
+        then $x[i+1] = y[j+1]$. We know then that the current common substring now has length $L' = L+1$. Otherwise, if the next characters are not equal, then the common substring has ended and the length
         of the common substring \emph{that ends at indexes \textbf{i} and \textbf{j} in strings \textbf{x} and \textbf{y} respectively} is $0$. The piecewise function of the recurrence accounts for this.
     \item 
         \begin{algorithmic}
@@ -167,14 +170,58 @@
                 \Return{$maxLength$}
             \EndFunction
         \end{algorithmic}
-    \item this shit is $O(nm)$ explain why!!!
+    \item The runtime is $O(nm)$. We iterate through all $n$ characters in string $x$ and for every character, we look at every character in string $y$ of length $m$.
+            There is a constant amount of work for each inner iteration as we are simply updating an array with a previously supplied value. Therefore the runtime is $O(nm)$ total.
 
 \end{enumerate}
 
 \newpage
 \section{Infinitely Many Rods}
 \begin{enumerate}
+    \item $T(i) = \True$ if a rod of length $i$ can be assembled with the given subrods and $T(i) = \False$ anyways.
+            The final answer of the algorithm will be the value stored at $T(i)$
+    \item         
+        \begin{align*}
+            T(i) = 
+            \begin{array}{cc}
+                \Bigg\{ & 
+                \begin{array}{cc}
+                    True & \forall (1 \leq x \leq n)(\exists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)   \\
+                    False & \forall (1 \leq x \leq n)(\nexists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)
+                \end{array}
+            \end{array}
+        \end{align*}
+
+        The base case is $T(0) = \True$
+
+        The recurrence is correct as at index $i$ with all the recurrences below $i$ already solved, we know that we only need to add a minimum of one rod from one of the previously solved solutions to form a rod of length $i$ if it exists.
+        Therefore we cycle through all the availble rod sizes $\ell_x$ and see if the recurrence at $i - \ell_x$ is true. If it is, then we know we are able to add a rod of size $\ell_x$ to form a rod of size $i$ and $T(i)$ is true.
+        Otherwise if none of the supplied rods work, we know that it is not possible to form a rod of size $i$ with our given inventory. 
+
+        The base case is $T(0) = \True$ as we want singleton rods to be true (i.e. a rod of size 3 can be formed by a single rod of length 3). 
+        This also intuitively makes sense as it doesn't matter what length of rods we have in order to make "no" rod.
+
     \item 
+        \begin{algorithmic}
+            \Function{CheckValidRod}{$\ell_1...\ell_n, S$}
+                \State $rod[0] = \True$
+                \ForAll{$s$ from $1$ to $S$}
+                    \ForAll{$i$ from $1$ to $n$}
+                        \If{$s - \ell_i >= 0 \: \AAnd \: rod[s - \ell_i]$}
+                            \State $rod[s] = \True$
+                            \State \textbf{break}
+                        \Else
+                            \State $rod[s] = \False$
+                        \EndIf
+                    \EndFor
+                \EndFor
+
+                \Return{$rod[S]$}
+            \EndFunction        
+        \end{algorithmic}
+
+    \item The runtime is $O(nS)$. In our dynamic programming algorithm, we update our table of solutions from $rod[1]$ to $rod[S]$.
+            Each table update takes $O(n)$ time as the worst case scenario is to cycle through all rods supplied. Therefore the total runtime is $O(nS)$
 \end{enumerate}
 
 \newpage

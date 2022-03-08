@@ -15,6 +15,7 @@
 
 \newcommand{\Not}{\textbf{not}}
 \newcommand{\AAnd}{\textbf{and}}
+\newcommand{\Or}{\textbf{or}}
 \newcommand{\True}{\texttt{True}}
 \newcommand{\False}{\texttt{False}}
 
@@ -26,9 +27,9 @@
 \begin{enumerate}
     \item Darwin Do
     \item 919941748
-    \item Collaborators: 
+    \item Collaborators: Raffael Davila, Graham Stodolski
     \item I have followed the academic integrity and collaboration policy
-    \item Hours: 
+    \item Hours: 16
 \end{enumerate}
 
 \newpage
@@ -150,14 +151,12 @@
     \item 
         \begin{algorithmic}
             \Function{LongestCommonSubstring}{$x, y$}
-                \ForAll{$i$ from $0$ to $n$ and $j$ from $0$ to $m$}
-                    \State $sub[0][j] = 0; \text{ } sub[i][0] = 0$
-                \EndFor
-
                 \State $maxLength = 0$
-                \ForAll{$i$ from $1$ to $n$}
-                    \ForAll{$j$ from $1$ to $m$}
-                        \If{$x[i] == y[j]$}
+                \ForAll{$i$ from $0$ to $n$}
+                    \ForAll{$j$ from $0$ to $m$}
+                        \If{$i == 0 \;\Or \; j == 0$}
+                            \State $sub[i][j] = 0$
+                        \ElsIf{$x[i] == y[j]$}
                             \State $sub[i][j] = sub[i-1][j-1] + 1$
                             \If{$sub[i][j] > maxLength$}
                                 $maxLength = sub[i][j]$
@@ -178,16 +177,16 @@
 \newpage
 \section{Infinitely Many Rods}
 \begin{enumerate}
-    \item $T(i) = \True$ if a rod of length $i$ can be assembled with the given subrods and $T(i) = \False$ anyways.
-            The final answer of the algorithm will be the value stored at $T(i)$
+    \item $T(i) = \True$ if a rod of length $i$ can be assembled with the given subrods and $T(i) = \False$ otherwise.
+            The final answer of the algorithm will be the value stored at $T(S)$
     \item         
         \begin{align*}
             T(i) = 
             \begin{array}{cc}
                 \Bigg\{ & 
                 \begin{array}{cc}
-                    True & \forall (1 \leq x \leq n)(\exists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)   \\
-                    False & \forall (1 \leq x \leq n)(\nexists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)
+                    \True & \forall (1 \leq x \leq n)(\exists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)   \\
+                    \False & \forall (1 \leq x \leq n)(\nexists \ell_x: i-\ell_x > 0 \land T(i-\ell_x) = \True)
                 \end{array}
             \end{array}
         \end{align*}
@@ -207,7 +206,7 @@
                 \State $rod[0] = \True$
                 \ForAll{$s$ from $1$ to $S$}
                     \ForAll{$i$ from $1$ to $n$}
-                        \If{$s - \ell_i >= 0 \: \AAnd \: rod[s - \ell_i]$}
+                        \If{$s - \ell_i >= 0 \: \AAnd \: rod[s - \ell_i] == \True$}
                             \State $rod[s] = \True$
                             \State \textbf{break}
                         \Else
@@ -227,6 +226,39 @@
 \newpage
 \section{At Most One Rod}
 \begin{enumerate}
+    \item $T(i, j) = \True$  if a rod of length $j$ can be assembled with the rods before $\ell_i$ including OR NOT including rod $\ell_i$. 
+        $T(i, j) = \False$ otherwise. The final answer will be the value of $T(S, n)$.
+    
     \item 
+        $T(i, j) = T(i-1, j) = \True \lor T(i-1, j-\ell_i) = \True$
+
+        The base cases are $T(0, 0) = \True$ and $T(0, 1...S) = \False$
+
+        The recurrence is composed of two parts. By checking if $T(i-1, j)$ is true, we are seeing whether length $j$ has already been reached by the previously tested rods for length $j$.
+        If it has, there is no need to factor in rod $\ell_i$, we already know it is possible to construct $j$. Therefore the value of $T(i, j)$ should be true.
+        On the otherhand, if we haven't reached $j$ yet, we want to see if adding rod $\ell_i$ will get us to $j$. If this is true, then it must be possible to reach length $j - \ell_i$ with the previous rods.
+        To check this, we need to look at $T(i-1, j-\ell_i)$. If this value is true, then that value is possible and we know we can construct length $j$ with rods up to $\ell_i$.
+    \item 
+        \begin{algorithmic}
+            \Function{CheckValidRod}{$\ell_1...\ell_n, S$}
+                \State $rod[0][0] = \True$
+
+                \ForAll{$i$ from $0$ to $n$}
+                    \ForAll{$j$ from $0$ to $S$}
+                        \If{$i == 0 \; \AAnd \; j \geq 1$}
+                            \State $rod[i][j] = \False$
+                        \ElsIf{$i > 0$}
+                            \State $rod[i, j] = rod[i-1, j] == \True \; \lor \; rod[i-1, j-\ell_i] == \True$
+                        \EndIf
+                    \EndFor
+                \EndFor
+
+                \Return{$rod[n, S]$}
+            \EndFunction        
+        \end{algorithmic}
+
+    \item The runtime is $O(nS)$
+            The runtime is $O(nS)$ as we have a nested for loop iterating through $S$ and $n$.
+            Each root operation of the nested for loops is to update the $rod$ table which takes constant time as we are simply comparing two values in the array that have already been computed.
 \end{enumerate}
 \end{document}

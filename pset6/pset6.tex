@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+
+\setlist[enumerate]{label=(\alph*)}
+\title{Pset 6}
+
+\begin{document}
+
+\newcommand{\Not}{\textbf{not}}
+\newcommand{\AAnd}{\textbf{and}}
+\newcommand{\Or}{\textbf{or}}
+\newcommand{\True}{\texttt{True}}
+\newcommand{\False}{\texttt{False}}
+
+\date{April 17, 2022 }
+\author{Darwin Do}
+
+\maketitle
+
+\begin{enumerate}
+    \item Darwin Do
+    \item 919941748
+    \item Collaborators: 
+    \item I have followed the academic integrity and collaboration policy
+    \item Hours: 
+\end{enumerate}
+
+\newpage
+
+\section{Minimum Spanning Tree}
+\begin{enumerate}
+    \item Starting from a random vertex $v$ in $S$, use DFS to \texttt{Explore} and count the number of reachable nodes from $v$.
+            If the number of nodes in this component-from-$v$ is not equal to the total number of vertices in $S$, we know $S$ is not connected.
+            Otherwise, all vertices in $S$ are reachable from $v$ and $S$ is connected. This takes $O(|E| + |V|)$ time through DFS.
+
+    \item Starting from a random vertex $v$ in $S$, use DFS to \texttt{Explore} $S$ and keep track of the nodes visited. 
+            If there is a back-edge detected where a node is a neighbor to an already-visited node that isn't the node used to get to that current node, we know $S$ contains a cycle.
+            Otherwise, if we manage to DFS through all of $S$ and detect no back-edge, $S$ should be cycle-free. This takes $O(|E| + |V|)$ time through DFS.
+            
+    \item Starting from a random vertex $v$ in $S$, use DFS to \texttt{Explore} all of $S$. If we fail to encounter a node in $S$ that exists in $V$, we know that $S$ does not have vertex set $V$.
+            Otherwise if all the nodes in $V$ are present in $S$, we have vertex set $V$. This takes $O(|E| + |V|)$ time through DFS.
+
+    \item Check MST
+\end{enumerate}
+
+\newpage
+\section{SAT Variations}
+
+\newpage
+\section{Graph Coloring}
+\end{document}

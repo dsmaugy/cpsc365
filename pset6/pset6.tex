@@ -19,7 +19,7 @@
 \newcommand{\True}{\texttt{True} }
 \newcommand{\False}{\texttt{False} }
 
-\date{April 17, 2022 }
+\date{April 19, 2022 }
 \author{Darwin Do}
 
 \maketitle
@@ -27,9 +27,9 @@
 \begin{enumerate}
     \item Darwin Do
     \item 919941748
-    \item Collaborators: 
+    \item Collaborators: Raffael Davila, Graham Stodolski
     \item I have followed the academic integrity and collaboration policy
-    \item Hours: 
+    \item Hours: 7
 \end{enumerate}
 
 \newpage
@@ -71,7 +71,7 @@ That means we can verify whether a candidate is a MST in polynomial time, so the
                 \end{align*}                
                 
                 We can do this process for every clause in the CNF to obtain a \texttt{2SAT} problem. 
-                We have reduced \texttt{Prob1} to \texttt{2SAT}. We know that \texttt{2SAT} is solvable in polynomial time through the technique discussed in lecture of creating a node for each variable and its negation, and adding edges between vertices that are constrained.
+                We have reduced \texttt{Prob1} to \texttt{2SAT} as these two CNFs are logically equivalent. We know that \texttt{2SAT} is solvable in polynomial time through the technique discussed in lecture of creating a node for each variable and its negation, and adding edges between vertices that are constrained.
                 We then check the graph to see if a variable is neighbors with its negated edge. If so, we know there is no assignment possible. 
 
         \newpage
@@ -84,7 +84,10 @@ That means we can verify whether a candidate is a MST in polynomial time, so the
 
                 At this point we have an instance of \texttt{Prob2} as each clause has at most 3 literals and each literal appears in at most 3 clauses.
                 
-                % TODO: do the biconditonal proof here
+                Let $f$ be a valid CNF instance of \texttt{3SAT}. We know that if $f$ is \texttt{Yes} for the \texttt{3SAT} problem, then $f'$ will be \texttt{Yes} for \texttt{Prob2} as we can use the assignment from $f$ and replace any variable $x$ in more than 3 clauses with the $y_1...y_n$ scheme mentioned above.
+                The value for $x$ in $f$ will be the same for the replacement $y_1...y_n$ in $f'$. Likewise if $f$ is \texttt{No} for \texttt{3SAT}, $f'$ will be \texttt{No} for \texttt{Prob2} as the only difference between $f$ and $f'$ is the replacement of more-than-3-clause variables $x$ with $y_1...y_n$ which is logically equivalent to that $x$.
+
+                Let $f'$ be a valid CNF instance of \texttt{Prob2}. This is just a \texttt{3SAT} problem with more constraints on the input. Therefore if \texttt{Prob2} is \texttt{Yes} then \texttt{3SAT} is \texttt{Yes} and if \texttt{Prob2} is \texttt{No} then \texttt{3SAT} is \texttt{No}.
 
                 This transformation takes polynomial time as we spend a linear amount of time in terms of literals to create set $A$ by iterating through all the literals.
                 Then for each $x \in A$, we spend a linear amount of creating the $y$ variables as we know the number of $y$ variables will always be less than the total number of literals. 
@@ -106,7 +109,7 @@ That means we can verify whether a candidate is a MST in polynomial time, so the
                 \end{enumerate}
 
                 Say that $f$ does not have a satisfying assignment so \texttt{SAT} is \texttt{No}. 
-                Since there is no valid assignment for $f$, there can be no satisfying assignment for $f'$ either since $f'$ is composed of $f$ appended with an independant part.
+                Since there is no valid assignment for $f$, there can be no satisfying assignment for $f'$ either since $f'$ is composed of $f$ appended with an independent part.
                 
                 Say that $f'$ has at least 3 satisfying assignments. That means
                 
@@ -125,31 +128,31 @@ That means we can verify whether a candidate is a MST in polynomial time, so the
 \section{Graph Coloring}
 \subsection{In NP}
 First we show that \texttt{4-COLORING} is in \textbf{NP}.
-Say we have graph $G = (V, E)$ with $k=4$ colors and a $c(v)$ color assignment. We can itertate through all the nodes in $G$ with DFS and check if any node has edges with the same color.
-If a node does, we know that this assignment $c(v)$ is not a valid \texttt{4-COLORING} assignment. Otherwise if we iterate through all the nodes and see that no node has two edges of the same color,
+Say we have graph $G = (V, E)$ with $k=4$ colors and a $c(v)$ color assignment. We can iterate through all the edges $(u, w) \in E$ and make sure that no edge pair has $c(u) = c(w)$.
+If an edge pair does, we know that this assignment $c(v)$ is not a valid \texttt{4-COLORING} assignment. Otherwise if we iterate through all the edges and see that no edge pair has two nodes of the same color,
 the $c(v)$ candidate is a valid \texttt{4-COLORING} assignment.
 
-This operation just uses DFS to explore the whole graph which is linear time. Therefore \texttt{4-COLORING} is in NP as this is also in polynomial time.
+This operation iterates through the edge set once so it is in linear time. Therefore \texttt{4-COLORING} is in NP as certifying a candidate soloution takes polynomial time.
 
 \subsection{NP-Hard}
 Now we show \texttt{4-COLORING} is NP-hard.
 Say we have a graph $G = (V, E)$ with a \texttt{3-COLORING} input form of $k=3$ colors and a $c(v)$ color assignment.
 
 We can reduce this instance to an instance of \texttt{4-COLORING} with graph $G' = (V', E')$.
-We form $G'$ by adding a new node $v'$ with color $c(v') = 4$ to $V$ and an edge $(v, v') \in E'$ to any $v \in V$.
+We form $G'$ by adding a new node $v'$ with color $c(v') = 4$ to $V$ and edges from $v'$ to all other $v \in V$. We can do this as no other $v \in V$ has color 4.
 
-The only difference between $G$ and $G'$ is this vertex $v'$ with color $c(v') = 4$. 
+The only difference between $G$ and $G'$ is this vertex $v'$ with color $c(v') = 4$ and all the edges coming out of it. 
 Therefore if $G$ is a valid \texttt{3-COLORING}, $G'$ is a valid \texttt{4-COLORING} as no node $v \in V$ will break the color-neighbor property through the definition of \texttt{3-COLORING}.
 No neighbor of $v'$ will break this property either as no other node will have color 4.
 Likewise, if $G$ is not a valid \texttt{3-COLORING} then $G'$ is not a valid \texttt{4-COLORING} as somewhere in $V$ the color principle is already broken.
 
-Assume that $G'$ is a valid \texttt{4-COLORING}. By construction, we know that all nodes $v \in V'$ follow the color-neighbor \texttt{COLORING} principle.
-We also know that vertex $v'$ is the only node with color 4 in $G'$. 
+Assume that $G'$ is a valid \texttt{4-COLORING}. By construction, we know that all nodes $v \in V'$ follow the color-neighbor \texttt{COLORING} principle. 
 Therefore we also know that $G$ is a valid \texttt{3-COLORING} because we can remove vertex $v'$ to get a graph with only 3 colors where all nodes follow the color-neighbor principle.
-Likewise, if $G'$ is not a valid \texttt{4-COLORING}, we know there are at least 2 nodes in $G'$ that share the same color. It can't be $v'$ as no other node has color 4.
-Therefore some pair of node neighbors $(u, v) \in V$ have the same color so \texttt{3-COLORING} is \texttt{No}.
+We know there are only 3 colors as $v'$ has color 4 and was connected to all other nodes in $G'$ and $G'$ is a valid \texttt{4-COLORING}.
+Likewise, if $G'$ is not a valid \texttt{4-COLORING}, we know there are at least 2 nodes in $G'$ that share the same color.
+Therefore some pair of node neighbors $(u, v) \in V$ have the same color. Even if we remove a node, there will still be 4 colors present in the graph so \texttt{3-COLORING} is \texttt{No}. 
 
-Doing this transformation from $G$ to $G'$ is in polynomial time as it is just adding a single node and edge.
+Doing this transformation from $G$ to $G'$ is in polynomial time as it is just adding a single node and edges to all other nodes.
 
 We have shown that $\texttt{3-COLORING} \leq_p \texttt{4-COLORING}$. Since \texttt{3-COLORING} is NP-hard, \texttt{4-COLORING} is NP-hard as well.
 

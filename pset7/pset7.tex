@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+
+\setlist[enumerate]{label=(\alph*)}
+\title{Pset 7}
+
+\begin{document}
+
+\newcommand{\Not}{\textbf{not}}
+\newcommand{\AAnd}{\textbf{and}}
+\newcommand{\Or}{\textbf{or}}
+\newcommand{\True}{\texttt{True}}
+\newcommand{\False}{\texttt{False}}
+
+\date{April 26, 2022 }
+\author{Darwin Do}
+
+\maketitle
+
+\begin{enumerate}
+    \item Darwin Do
+    \item 919941748
+    \item Collaborators: 
+    \item I have followed the academic integrity and collaboration policy
+    \item Hours: 
+\end{enumerate}
+
+\newpage
+
+\section{Strongly Independent Set}
+
+To prove that \texttt{SIS} is NP-complete, we show that $\texttt{IS} \leq_p \texttt{SIS}$ where \texttt{IS} is the \texttt{Independent-Set} problem as discussed in lecture.
+
+\begin{proof}
+    Let $G = (V, E)$ an undirected graph that is a valid input to the \texttt{IS} problem.
+    We will form $G' = (V', E')$ by replacing every edge $(u, v) \in E$ with two edges, $(u, w)$ and $(w, v)$.
+    Then, we connect all the $w$ nodes together.
+
+    If $G$ is \texttt{yes} on the \texttt{IS} problem, then $G'$ will also be \texttt{yes} on the \texttt{SIS} problem with the same $k$.
+    This is because any nodes in the independent set $S$ of size $|S| \geq k$ will have a distance between each other of at least 2 by definition. 
+    Due to the adding of the $(u, w)$ and $(w, v)$ edges, this distance will become at least 4. So the nodes in $S$ are a valid strong independent set in $G'$ with size $|S| \geq k$.
+    Otherwise, if $G$ does not have an independent set of size $|S| \geq k$, it cannot have a strong independent set of the same size as by definition, we can't form a set of the same size where there is no path of length 1.
+
+    If $G'$ is \texttt{yes} on the \texttt{SIS} problem, then $G$ will also be \texttt{yes} on the \texttt{IS} problem with the same $k$.
+    Let $S$ be the strong independent set of size $|S| \geq k$ in $G'$. 
+    We know that there can be no $w$ nodes in $S$ as all the $w$ nodes are connected to each other so you can reach any node from a $w$ node within 2 edges.
+    That means we can remove the $w$ nodes from $G'$ and re-connect the $(u, v)$ nodes to get $G$. The nodes in the strong independent set $S$ are the same nodes in the independent set for $G$.
+    Otherwise, if $G'$ does not have a strong independent set of size $|S| \geq k$, it cannot have an independent set of the same size in $G$.
+    In this case, is at least one pair of nodes $u, v$ whose distance is $\leq 2$. If it is 1, then we have already violated the independent set principle.
+    If the distance is 2, then we know the path from $u$ to $v$ is $(u, w) \rightarrow (w, v)$ by construction. Once we remove the $w$ node and reconnect the $(u, v)$, they will be neighbors and violate the independent set principle.
+
+    We have shown $\texttt{IS} \leq_p \texttt{SIS}$. Since \texttt{IS} is NP-complete, \texttt{SIS} is NP-complete as well.
+\end{proof}
+
+
+\newpage
+\section{Dominating Set}
+
+\end{document}

@@ -29,7 +29,7 @@
     \item 919941748
     \item Collaborators: Graham Stodolski, Raffael Davila
     \item I have followed the academic integrity and collaboration policy
-    \item Hours: 5
+    \item Hours: 5.5
 \end{enumerate}
 
 \newpage
@@ -40,7 +40,7 @@ To prove that \texttt{SIS} is NP-hard, we show that $\texttt{IS} \leq_p \texttt{
 
 \begin{proof}
     Let $G = (V, E)$ be an undirected graph that is a valid input to the \texttt{IS} problem.
-    We will form $G' = (V', E')$ by replacing every edge $(u, v) \in E$ with two edges, $(u, w)$ and $(w, v)$ where $w$ is a new node.
+    We will form $G' = (V', E')$ from $G$ by replacing every edge $(u, v) \in E$ with two edges, $(u, w)$ and $(w, v)$ where $w$ is a new node.
     Then, we connect all the $w$ nodes together.
 
     If $G$ is \texttt{yes} on the \texttt{IS} problem, then $G'$ will also be \texttt{yes} on the \texttt{SIS} problem with the same $k$.
@@ -57,6 +57,7 @@ To prove that \texttt{SIS} is NP-hard, we show that $\texttt{IS} \leq_p \texttt{
     In this case, is at least one pair of nodes $u, v \in S$ whose distance is $\leq 2$. If it is 1, then we have already violated the independent set principle.
     If the distance is 2, then we know the path from $u$ to $v$ is $(u, w) \rightarrow (w, v)$ by construction. Once we remove the $w$ node and reconnect the $(u, v)$, they will be neighbors and violate the independent set principle.
 
+    The transformation from $G \rightarrow G'$ is polynomial as for every $e \in E$ we are adding 1 extra node and up to $O(|V|)$ extra edges so the runtime is bound by $O(|E| \cdot |V|)$
     We have shown $\texttt{IS} \leq_p \texttt{SIS}$. Since \texttt{IS} is NP-hard, \texttt{SIS} is NP-hard as well.
 \end{proof}
 
@@ -80,28 +81,29 @@ Now we show that $\texttt{SIS} \in NP$.
 We first show that \texttt{DS} is NP-hard by showing that $\texttt{VC} \leq_p \texttt{DS}$ where \texttt{VC} is the \texttt{Vertex-Cover} problem as discussed in lecture.
 \begin{proof}
     Let $G = (V, E)$ be an undirected graph that is a valid input to the \texttt{VC} problem.
-    We will form $G' = (V', E')$ by replacing every edge $(u, v) \in E$ with two edges, $(u, w)$ and $(w, v)$ where $w$ is a new node.
-    Then we connect all the vertices $v \in V$ together with edges.
+    We will form $G' = (V', E')$ from $G$ by adding a $w$ node to $G$ and edges $(u, w)$ and $(w, v)$ for all $(u, v) \in E$.
+    We also remove any "floating" nodes that have degree 0 in $G$ as these nodes don't affect the \texttt{VC} problem but do affect \texttt{DS}.
 
     If $G$ is \texttt{yes} on the \texttt{VC} problem then there is a vertex set $S$ with size $\leq k$ where every edge has at least one vertex in $S$.
-    This set $S$ will also be a valid dominating set in $G'$. We know that every edge in $G$ is touching at least one node in $S$.
-    By construction, that means every $w$ node will be touching a node in $S$. Then since we connect all the nodes $v \in V$ together, we know all $v \in V$ is either a node in $S$ or touching a $S$ node.
-    Every $v \in V'$ is either in $S$ or touching a node in $S$ so $G'$ is a dominating set of size $\leq k$.
+    This set $S$ will also be a valid dominating set in $G'$. We know that every $(u, v)$ edge in $G$ is touching at least one node in $S$ so at least either $u$ or $v$ is in $S$.
+    By construction, that means every $w$ node will be touching a node in $S$ as well.
+    So every $v \in V'$ is either in $S$ or touching a node in $S$ so $G'$ is a dominating set of size $\leq k$.
     Otherwise, if set $S$ is \texttt{no} for \texttt{VC} on $G$, there will be at least one edge $(u, v) \in E$ where $u$ and $v$ are not in $S$.
     In $G'$, the $w$ node connecting to the $u, v$ nodes will be connected to 2 nodes not in $S$ breaking the dominating set principle.
 
     If $G'$ is \texttt{yes} on the \texttt{DS} problem, then $G$ is also \texttt{yes} on the \texttt{VC} problem.
-    Let $S$ be the dominating set in $G'$ of size $\leq k$. By definition, we know that every $w$ node is a neighbor of at least 1 node in $S$.
+    Let $S$ be the dominating set in $G'$ of size $\leq k$. By definition, we know that every $v \in V'$ is in $S$ or is neighbors with a node in $S$.
+    If $S$ does not contain any $w$ nodes, we can simply delete the $w$ nodes and their corresponding edges to obtain $G$ and retain the Vertex-Cover principle.
+    Otherwise, if a $w$ node is part of the dominating set with the following edges: $(u, w), (w, v)$, we can "shift" that role and promote either $u$ or $v$ to be in the dominating set.
+    The $w$ node has no other neighbors so the "work" that this node is doing to ensure the dominating set principle will be transferred to either $u$ or $v$ with no change to the number of elements in the dominating set.
+    Once all the $w$ nodes in $S$ have been reassigned to their neighbors, we have a modified set $S'$ where no $v \in S'$ is a $w$ node.
+    From the earlier justification, once we delete all the $w$ nodes, $S'$ will be a vertex cover on $G$.
+    Otherwise, if set $S$ is \texttt{no} for \texttt{DS} on $G'$, there will be at least one node $v^*$ who is not in $S$ and has 0 neighbors in $S$.
+    If the $v^*$ node is a $w$ node, then its neighbor nodes $u, v$ are not in $S$ and the $(u, v)$ edge in $G$ breaks the vertex cover principle.
+    If the $v^*$ node is not a $w$ node and is part of $V$, then any $(v^*, u)$ edge breaks the vertex cover principle.
 
-    When we remove the $w$ node and the $(v, w)$, $(w, u)$ edges, we connect $(v, u)$ again to form the edge in $E$. 
-    Since we know that at least $u$ or $v$ is in $S$, the $(v, u)$ edge follows the vertex-cover principle. 
-    We do this step for all edges in in $G'$ that are connected to a $w$ node. For edges that are not connected to a $w$ node, (instead connected to each $v \in V$), we 
-    simply remove these from $G'$ to get $G$ so we don't need to worry about them. Therefore the $S$ set is a valid vertex cover of size $\leq k$.
-    Otherwise, if set $S$ is \texttt{no} for \texttt{DS} on $G'$, there will be at least one node $v^*$ who has 0 neighbors in $S$.
-    We know $v^* \notin V$ as every $v \in V$ is connected to each other so all $v \in V$ is either in $S$ or a neighbor of $S$ since $|S| > 0$.
-    That means $v^*$ is a $w$ node with edges $(u, w)$ and $(w, v)$ where $v$ and $u$ are not in $S$. 
-    When deleting the $w$ nodes to form $G$, the $(u, v)$ edge will violate the vertex-cover principle and $S$ will not be a valid vertex-cover for $G$.
-    
+    The transformation from $G \rightarrow G'$ is polynomial as we are only adding 1 new node and a pair of edges for every $e \in E$ which takes linear time.
+    We have shown $\texttt{VC} \leq_p \texttt{DS}$. Since \texttt{VC} is NP-hard, \texttt{DS} is NP-hard as well.
 \end{proof}
 
 Now we show $\texttt{DS} \in NP$
